@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+{% csrf_token %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Online Test - Add Questions</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        ::-webkit-scrollbar {
+            width: 15px;
+        }
+
+        ::-webkit-scrollbar-track {
+            border-radius: 5px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.25);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 5px;
+            background: linear-gradient(to top, #c72092, #6c14d0);
+        }
+
+        section {
+            width: 100%;
+            background-image: url('image/bg1.png');
+            background-size: cover;
+            background-position: center;
+        }
+
+        section nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            box-shadow: 0 0 8px rgba(0, 0, 0, 0.6);
+            background: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+        }
+
+        section nav .logo {
+            font-size: 35px;
+            color: #c72092;
+            margin: 5px 0;
+            cursor: pointer;
+            position: relative;
+            left: -4%;
+        }
+
+        section nav .logo span {
+            color: #6c14d0;
+            text-decoration: underline;
+        }
+
+        section nav ul {
+            list-style: none;
+        }
+
+        section nav ul li {
+            display: inline-block;
+            margin: 5px 15px;
+        }
+
+        section nav ul li a {
+            text-decoration: none;
+            color: black;
+            transition: 0.2s;
+        }
+
+        section nav ul li a:hover {
+            color: #c72092;
+        }
+ #home {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50vh; /* This ensures the section takes the full viewport height */
+        text-align: center;
+        position: relative;
+    }
+
+    #home h1 {
+        font-size: 3rem;
+        color: #6c14d0;
+    }
+
+    .home-image-container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: -1; /* Keep the image behind the content */
+    }
+
+    .home-image-container img {
+        width: 625px;
+        height: 500px;
+        object-fit: cover;
+    }
+
+        .test-section {
+            padding: 50px 0;
+            background-color: #f9f9f9;
+        }
+
+        .card-deck .card {
+            margin: 15px;
+        }
+
+        .test-card {
+            text-align: center;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .test-card:hover {
+            transform: scale(1.05);
+        }
+
+        footer {
+            width: 100%;
+        }
+
+        footer .footer_main {
+            width: 100%;
+            background: #f3f1f1;
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+        }
+
+        footer .footer_main .tag .center {
+            text-align: center;
+        }
+
+        footer .footer_main .tag h1 {
+            font-size: 25px;
+            margin: 25px 0;
+            color: #1c0080;
+        }
+
+        footer .footer_main .tag a {
+            display: block;
+            color: black;
+            text-decoration: none;
+            margin: 9px 0;
+        }
+
+        footer .footer_main .tag .social_link {
+            display: flex;
+        }
+
+        footer .footer_main .tag .social_link a {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            box-shadow: 0 0 20px 10px rgba(0, 0, 0, 0.05);
+            position: relative;
+            margin: 0 5px;
+            z-index: 10;
+            overflow: hidden;
+        }
+
+        footer .footer_main .tag .social_link a .fa-brands {
+            font-size: 15px;
+            line-height: 30px;
+            z-index: 10;
+            position: relative;
+            transition: 0.5s;
+        }
+
+        footer .footer_main .tag .social_link a:hover i {
+            color: white;
+        }
+
+        footer .footer_main .tag .social_link a::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: linear-gradient(to top, #c72092, #6c14d0);
+            position: absolute;
+            z-index: 1;
+            transition: 0.5s;
+        }
+
+        footer .footer_main .tag .social_link a:hover::after {
+            top: -200%;
+        }
+
+        #welcome-section {
+            display: none;
+            text-align: center;
+            margin-top: 100px;
+            font-size: 30px;
+            color: #6c14d0;
+        }
+
+        .add-questions-card {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            transition: transform 0.2s ease-in-out;
+        }
+
+        .add-questions-card:hover {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+{% load static %}
+{% csrf_token %}
+    <!-- Header Section -->
+    <section>
+        <nav>
+            <div class="logo">
+                <span>Online Quetions set</span>
+            </div>
+            <ul>
+                <li><a href="#home" >Home</a></li>
+                <li><a href="#about" >About</a></li>
+                <li><a href="#test">Questions set</a></li>
+                <li><a href="#add-questions"> Add Questions set</a></li>
+                <li><a href="#contacts">Contact</a></li>
+            </ul>
+        </nav>
+    </section>
+
+    <!-- Welcome Section -->
+<!-- Welcome Section --><br></br><br></br>
+<section id="home" class="home section">
+<br></br>
+    <!-- Poster Image -->
+    <div class="home-image-container">
+        <img src="{% static 'home2.jpg' %}" alt="Home Poster" class="img-fluid">
+    </div>
+</section>
+
+
+
+    </div><br></br><br></br><br></br>
+<!-- About Section -->
+<section id="about" class="about-section"><br></br><br></br>
+    <div class="container"><br></br>
+        <div class="about-content d-flex align-items-center">
+            <!-- Left side: Image -->
+            <div class="about-image" style="flex: 1;">
+                <img src="{% static 'images/logo.jpg' %}" alt="Logo" style="max-width: 70%; height: auto;">
+            </div>
+
+            <!-- Right side: Paragraph -->
+            <div class="about-text" style="flex: 2; padding-left: 20px;">
+                <h1>About Us</h1>
+                <p>
+                    Welcome to the Online Questions platform! We offer a wide variety of programming language questions
+                    that help you assess and improve your skills. Whether you are a beginner or an expert, our
+                    questions are designed to challenge you and improve your coding capabilities.
+                </p>
+                <p>
+                    You can answer questions on different languages such as C, C++, Java, Python, and Django, and even
+                    add your own questions to make the platform richer and more diverse.
+                </p>
+                <p>
+                    We are committed to providing an interactive and engaging learning experience.
+                </p>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+
+    <!-- Test Section -->
+    <section id="test" class="test-section">
+        <div class="container">
+            <h1 class="text-center mb-5">Quetion set</h1>
+            <div class="row card-deck">
+                <!-- Test Cards for Programming Languages -->
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>C</h3>
+                        <p>Test your knowledge of C programming.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfqJyKFXe1TiBKAcuW7ichqvUCtQAt9zDTuctMDOR5Ixr0Pqg/viewform?usp=sharing"
+                           class="btn btn-primary" target="_blank">Take Test</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>C++</h3>
+                        <p>Test your knowledge of C++ programming.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSedOpDbRV0veR-RLYpKUgkSxUV5nMkXMegnOumvHbO1j9vRaw/viewform?usp=sharing"
+                           class="btn btn-primary" target="_blank">Take Test</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>Java</h3>
+                        <p>Test your knowledge of Java programming.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSc3pOywUtY7IY7xB0GZgpD7hxKjBvQ8zcp62ZfC6r-o54bB4g/viewform?usp=sharing"
+                           class="btn btn-primary" target="_blank">Take Test</a>
+                    </div><br></br>
+                    <br></br><br></br>
+                </div>
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>Python</h3>
+                        <p>Test your knowledge of Python programming.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSfoHh_lMqwq1UlYVnMI9a3pI0JbOAxLOVmpxe918YS_GJvLhA/viewform?usp=sharing"
+                           class="btn btn-primary" target="_blank">Take Test</a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>Django</h3>
+                        <p>Test your knowledge of Django framework.</p>
+                        <a href="https://docs.google.com/forms/d/e/1FAIpQLSeEoV23Gspz0xzoUEmPhLexa8P49EmVzuVW6iwsj5nAYkE54g/viewform?usp=sharing"
+                           class="btn btn-primary" target="_blank">Take Test</a>
+                    </div>
+                </div>
+                <!-- Add more test cards for other languages or topics as needed -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Add Questions Section -->
+    <section id="add-questions" class="add-questions-section py-5">
+        <div class="container">
+            <h1 class="text-center mb-5">Add Your Questions set</h1>
+            <div id="questions-container" class="row">
+                <!-- Dynamically added question cards will appear here -->
+            </div>
+            <!-- Form to add new questions -->
+            <form id="add-form" class="mt-4">
+                <div class="form-group">
+                    <label for="topicName">Topic Name</label>
+                    <input type="text" class="form-control" id="topicName" placeholder="Enter topic name" required>
+                </div>
+                <div class="form-group">
+                    <label for="formLink">Google Form Link</label>
+                    <input type="url" class="form-control" id="formLink" placeholder="Enter Google Form link" required>
+                </div>
+                <button type="submit" class="btn btn-success mt-3">Add Question</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+
+    <footer>
+        <section id="contacts" class="contact">
+        <div class="footer_main">
+            <div class="tag">
+                <h1>Contact Us</h1>
+                <a href="janhavikhonde20@gmail.com">Email Us:janhavikhonde20@gmail.com </a>
+                <a href="8605125307">Call Us:8605125307</a>
+            </div>
+
+        </div>
+        </section>
+    </footer>
+
+
+    <script>
+        // Show the welcome section
+        function showWelcome() {
+            document.getElementById('welcome-section').style.display = "block";
+        }
+
+        // Handle adding new questions
+        document.getElementById('add-form').addEventListener('submit', function (event) {
+            event.preventDefault();
+            const topicName = document.getElementById('topicName').value;
+            const formLink = document.getElementById('formLink').value;
+            const newCard = `
+                <div class="col-md-4">
+                    <div class="test-card">
+                        <h3>${topicName}</h3>
+                        <p>Test your knowledge on ${topicName}.</p>
+                        <a href="${formLink}" class="btn btn-primary" target="_blank">Add ${topicName} Questions</a>
+                    </div>
+                </div>`;
+            document.getElementById('questions-container').innerHTML += newCard;
+            document.getElementById('add-form').reset();
+        });
+    </script>
+</body>
+</html>
